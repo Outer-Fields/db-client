@@ -35,8 +35,10 @@ public class DBServiceClient {
     private static CloseableHttpClient client;
     private static String address;
 
-    public static void init(String username, String password)
+    public static void init(String addr, String username, String password)
             throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
+
+        address = addr;
         KeyStore keystore = KeyStore.getInstance("PKCS12");
 
         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();

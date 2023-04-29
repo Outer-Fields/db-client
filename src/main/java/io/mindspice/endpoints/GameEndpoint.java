@@ -1,7 +1,7 @@
 package io.mindspice.endpoints;
 
 public enum GameEndpoint implements Endpoint{
-    GET_PAWN_SET,
+    GET_PAWN_SETS,
     UPDATE_PAWN_SET,
     DELETE_PAWN_SET,
     GET_POTION_TOKEN_AMOUNT,

@@ -1,9 +1,10 @@
-package io.mindspice.api;
+package io.mindspice.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.mindspice.DBServiceClient;
 import io.mindspice.JsonUtils;
+import io.mindspice.api.ApiResponse;
 import io.mindspice.endpoints.Endpoint;
 
 import java.io.IOException;
@@ -13,8 +14,9 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public interface IApiResponse {
-    default <T> ApiResponse<T> newResponse(JsonNode jsonNode, String dataField, Class<T> type,
+public class ResponseUtil {
+
+    public static <T> ApiResponse<T> newResponse(JsonNode jsonNode, String dataField, Class<T> type,
             Endpoint endpoint) throws IOException {
 
         var success = jsonNode.get("success").asBoolean();
@@ -32,7 +34,7 @@ public interface IApiResponse {
         );
     }
 
-    default ApiResponse<JsonNode> newResponseNode(JsonNode jsonNode, String dataField,
+    public static ApiResponse<JsonNode> newResponseNode(JsonNode jsonNode, String dataField,
             Endpoint endpoint) throws IOException {
 
         var success = jsonNode.get("success").asBoolean();
@@ -50,7 +52,7 @@ public interface IApiResponse {
         );
     }
 
-    default ApiResponse<JsonNode> newResponseNode(JsonNode jsonNode, Endpoint endpoint) throws IOException {
+    public static ApiResponse<JsonNode> newResponseNode(JsonNode jsonNode, Endpoint endpoint) throws IOException {
 
         var success = jsonNode.get("success").asBoolean();
         Optional<JsonNode> data = success
@@ -67,7 +69,7 @@ public interface IApiResponse {
         );
     }
 
-    default <T> ApiResponse<T> newResponse(JsonNode jsonNode, Class<T> type,
+    public static <T> ApiResponse<T> newResponse(JsonNode jsonNode, Class<T> type,
             Endpoint endpoint) throws IOException {
 
         var success = jsonNode.get("success").asBoolean();
@@ -85,7 +87,7 @@ public interface IApiResponse {
         );
     }
 
-    default <T> ApiResponse<List<T>> newResponseList(JsonNode jsonNode, String dataField,
+    public static <T> ApiResponse<List<T>> newResponseList(JsonNode jsonNode, String dataField,
             TypeReference<List<T>> typeRef, Endpoint endpoint) throws IOException {
 
         var success = jsonNode.get("success").asBoolean();
@@ -106,7 +108,7 @@ public interface IApiResponse {
         );
     }
 
-    default <T> ApiResponse<List<T>> newResponseList(JsonNode jsonNode,
+    public static <T> ApiResponse<List<T>> newResponseList(JsonNode jsonNode,
             TypeReference<List<T>> typeRef, Endpoint endpoint) throws IOException {
 
         var success = jsonNode.get("success").asBoolean();
@@ -127,7 +129,7 @@ public interface IApiResponse {
         );
     }
 
-    default <T> ApiResponse<List<T>> newResponseList(JsonNode jsonNode, List<T> list,
+    public static <T> ApiResponse<List<T>> newResponseList(JsonNode jsonNode, List<T> list,
             Endpoint endpoint) throws IOException {
 
         var success = jsonNode.get("success").asBoolean();
@@ -142,7 +144,7 @@ public interface IApiResponse {
         );
     }
 
-    default <T, U> ApiResponse<Map<T, U>> newResponseMap(JsonNode jsonNode, String dataField,
+    public static <T, U> ApiResponse<Map<T, U>> newResponseMap(JsonNode jsonNode, String dataField,
             TypeReference<Map<T, U>> typeRef, Endpoint endpoint) throws IOException {
 
         var success = jsonNode.get("success").asBoolean();
@@ -163,7 +165,7 @@ public interface IApiResponse {
         );
     }
 
-    default <T, U> ApiResponse<Map<T, U>> newResponseMap(JsonNode jsonNode,
+    public static <T, U> ApiResponse<Map<T, U>> newResponseMap(JsonNode jsonNode,
             TypeReference<Map<T, U>> typeRef, Endpoint endpoint) throws IOException {
 
         var success = jsonNode.get("success").asBoolean();
@@ -184,7 +186,7 @@ public interface IApiResponse {
         );
     }
 
-    default <T> ApiResponse<T> newResponse(T object, Endpoint endpoint) throws IOException {
+    public static <T> ApiResponse<T> newResponse(T object, Endpoint endpoint) throws IOException {
         return new ApiResponse<>(
                 Optional.of(object),
                 true,
@@ -195,7 +197,7 @@ public interface IApiResponse {
         );
     }
 
-    default <T> ApiResponse<T> newFailedResponse(JsonNode jsonNode, Endpoint endpoint) {
+    public static <T> ApiResponse<T> newFailedResponse(JsonNode jsonNode, Endpoint endpoint) {
         return new ApiResponse<>(
                 Optional.empty(),
                 false,
