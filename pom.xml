@@ -6,7 +6,7 @@
 
     <groupId>io.mindspice</groupId>
     <artifactId>database-service-client</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -24,9 +24,22 @@
 
         <dependency>
             <groupId>io.mindspice</groupId>
-            <artifactId>json-utils</artifactId>
-            <version>1.0</version>
+            <artifactId>mind-lib</artifactId>
+            <version>0.1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.mindspice</groupId>
+            <artifactId>jxch-rpc-library-custom</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.13.1</version>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 
