@@ -3,12 +3,14 @@ package io.mindspice.databaseservice.client.api;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.mindspice.databaseservice.client.DBServiceClient;
 import io.mindspice.databaseservice.client.Request;
+import io.mindspice.databaseservice.client.endpoints.GameEndpoint;
 import io.mindspice.databaseservice.client.endpoints.NftEndpoint;
 import io.mindspice.databaseservice.client.schema.*;
 import io.mindspice.databaseservice.client.util.Util;
 import io.mindspice.mindlib.util.JsonUtils;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 
@@ -246,6 +248,7 @@ public class OkraNFTAPI extends BaseAPI {
             throw new IllegalStateException("Bad return", e);
         }
     }
+
     public APIResponse<Boolean> addCardToCollection(String collectionSet, Card card) {
         try {
             byte[] data = new JsonUtils.ObjectBuilder()
@@ -261,4 +264,74 @@ public class OkraNFTAPI extends BaseAPI {
             throw new IllegalStateException("Bad return", e);
         }
     }
+
+    public APIResponse<Boolean> addPackPurchases(String uuid, String address, String packType,
+            int height, String coinId) {
+        try {
+            byte[] data = new JsonUtils.ObjectBuilder()
+                    .put("uuid", uuid)
+                    .put("address", Util.normalizeHex(address))
+                    .put("pack_type", packType)
+                    .put("height", height)
+                    .put("coin_id", Util.normalizeHex(coinId))
+                    .buildBytes();
+            Request req = new Request(NftEndpoint.ADD_PACK_PURCHASE, data);
+            byte[] resp = client.makeRequest(req);
+            JsonNode respNode = JsonUtils.readTree(resp);
+            return newResponse(respNode, "success", Boolean.class, NftEndpoint.ADD_PACK_PURCHASE);
+        } catch (IOException e) {
+            throw new IllegalStateException("Bad return", e);
+        }
+    }
+
+    public APIResponse<Boolean> addFailedUpdate(String launcherId, int height, boolean isAccount, String reason) {
+        try {
+            byte[] data = new JsonUtils.ObjectBuilder()
+                    .put("launcher_id", Util.normalizeHex(launcherId))
+                    .put("height", height)
+                    .put("is_account", isAccount)
+                    .put("reason", reason)
+                    .buildBytes();
+            Request req = new Request(NftEndpoint.ADD_FAILED_UPDATE, data);
+            byte[] resp = client.makeRequest(req);
+            JsonNode respNode = JsonUtils.readTree(resp);
+            return newResponse(respNode, "success", Boolean.class, NftEndpoint.ADD_FAILED_UPDATE);
+        } catch (IOException e) {
+            throw new IllegalStateException("Bad return", e);
+        }
+    }
+
+    public APIResponse<Boolean> addFailedMint(String uuid, String reason) {
+        try {
+            byte[] data = new JsonUtils.ObjectBuilder()
+                    .put("uuid", uuid)
+                    .put("reason", reason)
+                    .buildBytes();
+            Request req = new Request(NftEndpoint.ADD_FAILED_MINT, data);
+            byte[] resp = client.makeRequest(req);
+            JsonNode respNode = JsonUtils.readTree(resp);
+            return newResponse(respNode, "success", Boolean.class, NftEndpoint.ADD_FAILED_MINT);
+        } catch (IOException e) {
+            throw new IllegalStateException("Bad return", e);
+        }
+    }
+
+    public APIResponse<Boolean> addFailedTransaction(String uuid, int playerId, int okraAmount, int outrAmount, String reason) {
+        try {
+            byte[] data = new JsonUtils.ObjectBuilder()
+                    .put("uuid", uuid)
+                    .put("player_id", playerId)
+                    .put("okra_amount", okraAmount)
+                    .put("outr_amount", outrAmount)
+                    .put("reason", reason)
+                    .buildBytes();
+            Request req = new Request(NftEndpoint.ADD_FAILED_TRANSACTION, data);
+            byte[] resp = client.makeRequest(req);
+            JsonNode respNode = JsonUtils.readTree(resp);
+            return newResponse(respNode, "success", Boolean.class, NftEndpoint.ADD_FAILED_TRANSACTION);
+        } catch (IOException e) {
+            throw new IllegalStateException("Bad return", e);
+        }
+    }
+
 }

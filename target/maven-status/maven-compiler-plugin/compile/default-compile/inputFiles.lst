@@ -1,5 +1,6 @@
 /home/mindspice/code/Java/Okra/database-service-client/src/main/java/io/mindspice/databaseservice/client/schema/AccountDid.java
 /home/mindspice/code/Java/Okra/database-service-client/src/main/java/io/mindspice/databaseservice/client/schema/CardPack.java
+/home/mindspice/code/Java/Okra/database-service-client/src/main/java/io/mindspice/databaseservice/client/schema/MatchResult.java
 /home/mindspice/code/Java/Okra/database-service-client/src/main/java/io/mindspice/databaseservice/client/api/APIResponse.java
 /home/mindspice/code/Java/Okra/database-service-client/src/main/java/io/mindspice/databaseservice/client/schema/Credential.java
 /home/mindspice/code/Java/Okra/database-service-client/src/main/java/io/mindspice/databaseservice/client/api/OkraNFTAPI.java

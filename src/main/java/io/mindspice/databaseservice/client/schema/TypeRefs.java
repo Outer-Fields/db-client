@@ -14,5 +14,6 @@ public class TypeRefs {
     public static final TypeReference<List<CoinRecord>> COIN_RECORD_LIST = new TypeReference<>() { };
     public static final TypeReference<List<Card>> CARD_LIST = new TypeReference<>() { };
     public static final TypeReference<List<RewardDispersal>> REWARD_LIST = new TypeReference<>() { };
+    public static final TypeReference<List<MatchResult>> MATCH_RESULT_LIST = new TypeReference<>() { };
 
 }

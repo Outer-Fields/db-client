@@ -5,11 +5,13 @@ io/mindspice/databaseservice/client/schema/CardType.class
 io/mindspice/databaseservice/client/endpoints/GameEndpoint.class
 io/mindspice/databaseservice/client/api/OkraAuthAPI.class
 io/mindspice/databaseservice/client/endpoints/AuthEndpoint.class
+io/mindspice/databaseservice/client/schema/MatchResult.class
 io/mindspice/databaseservice/client/api/APIResponse.class
 io/mindspice/databaseservice/client/schema/TypeRefs.class
 io/mindspice/databaseservice/client/DBServiceClient.class
 io/mindspice/databaseservice/client/schema/TypeRefs$3.class
 io/mindspice/databaseservice/client/schema/PlayerFunds.class
+io/mindspice/databaseservice/client/schema/TypeRefs$6.class
 io/mindspice/databaseservice/client/schema/TransactionLog.class
 io/mindspice/databaseservice/client/api/BaseAPI.class
 io/mindspice/databaseservice/client/schema/NftUpdate.class

@@ -5,9 +5,13 @@ import io.mindspice.databaseservice.client.DBServiceClient;
 import io.mindspice.databaseservice.client.Request;
 import io.mindspice.databaseservice.client.endpoints.GameEndpoint;
 import io.mindspice.databaseservice.client.schema.*;
+import io.mindspice.databaseservice.client.util.Util;
+import io.mindspice.jxch.rpc.util.ChiaUtils;
+import io.mindspice.jxch.rpc.util.bech32.AddressUtil;
 import io.mindspice.mindlib.util.JsonUtils;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -192,7 +196,12 @@ public class OkraGameAPI extends BaseAPI {
 
     public APIResponse<List<String>> getPlayerCards(String did) {
         try {
-            byte[] data = JsonUtils.newSingleNodeAsBytes("did", did);
+            byte[] data;
+            if (did.toLowerCase().startsWith("did")) {
+                data = JsonUtils.newSingleNodeAsBytes("did", AddressUtil.decode(did).toHexString(true));
+            } else {
+                data = JsonUtils.newSingleNodeAsBytes("did", Util.normalizeHex(did));
+            }
             Request req = new Request(GameEndpoint.GET_PLAYER_CARDS, data);
             byte[] resp = client.makeRequest(req);
             JsonNode respNode = JsonUtils.readTree(resp);
@@ -282,7 +291,7 @@ public class OkraGameAPI extends BaseAPI {
 
     public APIResponse<Boolean> isValidDidLauncher(String launcherId) {
         try {
-            byte[] data = JsonUtils.newSingleNodeAsBytes("launcher_id", launcherId);
+            byte[] data = JsonUtils.newSingleNodeAsBytes("launcher_id", Util.normalizeHex(launcherId));
             Request req = new Request(GameEndpoint.IS_VALID_DID_LAUNCHER, data);
             byte[] resp = client.makeRequest(req);
             JsonNode respNode = JsonUtils.readTree(resp);
@@ -364,16 +373,18 @@ public class OkraGameAPI extends BaseAPI {
     }
 
     public APIResponse<Boolean> commitFullMatchResult(String matchUid, int player1, int player2, boolean player1Won,
-            boolean player2Won, int roundCount, String finishState) {
+            boolean player2Won, int roundCount, String finishState, List<String> player1Ips, List<String> player2Ips) {
         try {
             byte[] data = new JsonUtils.ObjectBuilder()
                     .put("match_uid", matchUid)
                     .put("player_1", player1)
-                    .put("player2", player2)
+                    .put("player_2", player2)
                     .put("player_1_won", player1Won)
                     .put("player_2_won", player2Won)
                     .put("round_count", roundCount)
                     .put("finish_state", finishState)
+                    .put("player1_ips", player1Ips)
+                    .put("player2_ips", player2Ips)
                     .buildBytes();
             Request req = new Request(GameEndpoint.COMMIT_FULL_MATCH_RESULT, data);
             byte[] resp = client.makeRequest(req);
@@ -403,7 +414,7 @@ public class OkraGameAPI extends BaseAPI {
 
     public APIResponse<Integer> getFreeGamesPlayed(int playerId) {
         try {
-            byte[] data = JsonUtils.newSingleNodeAsBytes("played_id", playerId);
+            byte[] data = JsonUtils.newSingleNodeAsBytes("player_id", playerId);
             Request req = new Request(GameEndpoint.GET_FREE_GAMES_PLAYED, data);
             byte[] resp = client.makeRequest(req);
             JsonNode respNode = JsonUtils.readTree(resp);
@@ -415,7 +426,7 @@ public class OkraGameAPI extends BaseAPI {
 
     public APIResponse<Boolean> incFreeGamesPlayed(int playerId) {
         try {
-            byte[] data = JsonUtils.newSingleNodeAsBytes("played_id", playerId);
+            byte[] data = JsonUtils.newSingleNodeAsBytes("player_id", playerId);
             Request req = new Request(GameEndpoint.ADD_FREE_GAME_PLAYED, data);
             byte[] resp = client.makeRequest(req);
             JsonNode respNode = JsonUtils.readTree(resp);
@@ -437,7 +448,37 @@ public class OkraGameAPI extends BaseAPI {
         }
     }
 
+    public APIResponse<Boolean> addPackRedemption(String packType, int amount, String senderAddress, String coinId) {
+        try {
+            byte[] data = new JsonUtils.ObjectBuilder()
+                    .put("pack_type", packType)
+                    .put("amount", amount)
+                    .put("sender_address", senderAddress)
+                    .put("coin_id", coinId)
+                    .buildBytes();
+            Request req = new Request(GameEndpoint.ADD_PACK_REDEMPTION, data);
+            byte[] resp = client.makeRequest(req);
+            JsonNode respNode = JsonUtils.readTree(resp);
+            return newResponse(respNode, "success", Boolean.class, GameEndpoint.ADD_PACK_REDEMPTION);
+        } catch (IOException e) {
+            throw new IllegalStateException("Bad return", e);
+        }
+    }
 
+    public APIResponse<List<MatchResult>> getMatchResults(long startEpochMilli, long endEpochMilli) {
+        try {
+            byte[] data = new JsonUtils.ObjectBuilder()
+                    .put("start_milli", startEpochMilli)
+                    .put("end_milli", endEpochMilli)
+                    .buildBytes();
+            Request req = new Request(GameEndpoint.GET_MATCH_RESULTS, data);
+            byte[] resp = client.makeRequest(req);
+            JsonNode respNode = JsonUtils.readTree(resp);
+            return newResponseList(respNode, "results", TypeRefs.MATCH_RESULT_LIST, GameEndpoint.GET_MATCH_RESULTS);
+        } catch (IOException e) {
+            throw new IllegalStateException("Bad return", e);
+        }
 
+    }
 
 }
